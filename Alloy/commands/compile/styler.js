@@ -7,7 +7,8 @@ var fs = require('fs'),
 	grammar = require('../../grammar/tss'),
 	logger = require('../../logger'),
 	BuildLog = require('./BuildLog'),
-	CONST = require('../../common/constants');
+	CONST = require('../../common/constants'),
+	deepExtend = require('node.extend');
 
 // constants
 var GLOBAL_STYLE_CACHE = 'global_style_cache.json';
@@ -17,10 +18,10 @@ var STYLE_REGEX = /^\s*([\#\.]{0,1})([^\[]+)(?:\[([^\]]+)\])*\s*$/;
 var EXPR_REGEX = new RegExp('^' + STYLE_EXPR_PREFIX + '(.+)');
 var BINDING_REGEX = /^\s*\{\s*([^\s]+)\s*\}\s*$/;
 var VALUES = {
-	TSSIF: 1000000,
 	ID:     100000,
 	CLASS:   10000,
 	API:      1000,
+	TSSIF:     500,
 	PLATFORM:  100,
 	FORMFACTOR: 10,
 	SUM:         1,
@@ -483,10 +484,10 @@ exports.generateStyleParams = function(styles,classes,id,apiName,extraStyle,theS
 						lastObj = {};
 					}
 				} else if(!q.if) {
-					lastObj = U.deepExtend(lastObj, style.style);
+					lastObj = deepExtend(true, lastObj, style.style);
 				}
 			} else {
-					lastObj = U.deepExtend(lastObj, style.style);
+					lastObj = deepExtend(true, lastObj, style.style);
 			}
 		}
 	});
